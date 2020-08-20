@@ -6,7 +6,10 @@ namespace VisualStudioDemo
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello God is gonna use this Knowledge ");
+            string name;
+            Console.WriteLine("Please Enter you name");
+            name = Console.ReadLine();
+            Console.WriteLine("Hello", name);
         }
     }
 }
