@@ -1,40 +1,81 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace VisualStudioDemo
+namespace VisualStudioDemoRedo
 {
     class Program
     {
         static void Main(string[] args)
         {
-            int[] arrayOfNumbers = { 0, 5, 78, 56, 89, 78, 23, 56 };
-            int[] oddNumbers = new int[8], evenNumbers = new int[8];
-            int oddCount = 0, evenCount = 0;
+            /* Practice Spec:
+             * Create a program that will generate a 2x2 2 dimmensional array, and will repeatedly display the current layout
+             * then prompt the user for a row number, column number, and value until the user enters "exit". 
+             * When the user enters the info, overwrite that position with the value the user provided.
+             */
 
+            int[,] theArray = new int[2, 2];
 
-            for(int i=0; i<arrayOfNumbers.Length; i++)
+            string userInput = "";
+
+            do
             {
-                if (arrayOfNumbers[i] % 2 == 0)
+                DisplayArray(theArray);
+
+                Console.Write("Please enter \"Exit\" to quit, or anything else to continue: ");
+                userInput = Console.ReadLine();
+
+                if (userInput.ToLower() != "exit")
                 {
-                    evenNumbers[evenCount] = arrayOfNumbers[i];
-                    evenCount++;
-                }
-                else
-                {
-                    oddNumbers[oddCount]=arrayOfNumbers[i];
-                    oddCount++;
-                }
+                    int row, column, value;
 
-            }
-            Console.WriteLine(evenCount);
-            foreach (int evenNumber in evenNumbers)
+                    row = GetValidInt("Please enter a row number: ", 0, 2);
+
+                    column = GetValidInt("Please enter a column number: ", 0, 2);
+
+                    value = GetValidInt("Please enter a value: ", int.MinValue, int.MaxValue);
+
+                    theArray[column, row] = value;
+                }
+            } while (userInput.ToLower() != "exit");
+        }
+
+        static void DisplayArray(int[,] arrayToDisplay)
+        {
+            Console.WriteLine("-----");
+            for (int r = 0; r < 2; r++)
             {
-                Console.WriteLine(evenNumber);
+                Console.Write("|");
+                for (int c = 0; c < 2; c++)
+                {
+                    Console.Write(arrayToDisplay[c, r] + "|");
+                }
+                Console.WriteLine("\n-----");
             }
-            Console.WriteLine(oddCount);
-            foreach (int oddNumber in evenNumbers)
+        }
+
+        static int GetValidInt(string prompt, int min, int max)
+        {
+            bool valid = false;
+            int userInput = -1;
+            do
             {
-                Console.WriteLine(oddNumber);
-            }
+                Console.Write(prompt);
+                try
+                {
+                    userInput = int.Parse(Console.ReadLine());
+                    if (userInput < min || userInput > max)
+                    {
+                        throw new Exception("Input was outside of the bounds of the array");
+                    }
+                    valid = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("ERROR: " + ex.Message);
+                    Console.WriteLine("Please try again.");
+                }
+            } while (!valid);
+            return userInput;
         }
     }
 }
